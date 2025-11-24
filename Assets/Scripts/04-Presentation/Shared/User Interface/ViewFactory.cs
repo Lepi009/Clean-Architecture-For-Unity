@@ -1,7 +1,8 @@
 using System;
+using Infrastructure;
 using UnityEngine;
 
-namespace Infrastructure {
+namespace Presentation {
     public interface IViewFactory {
         View CreateView(GameObject prefab, Presenter presenter);
     }

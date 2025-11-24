@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Domain;
+using Infrastructure;
 using UnityEngine;
 
-namespace Infrastructure {
+namespace Presentation {
     public class ViewPipeline : IViewManager {
         //include all fields and properties here (private & public)
         #region Fields and Properties
