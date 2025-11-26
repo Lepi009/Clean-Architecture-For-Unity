@@ -30,7 +30,7 @@ namespace Presentation {
         //include all public methods here
         #region Public Methods
 
-        public void CreateSingleViewForAsync<TPresenter>(TPresenter presenter, Action<bool> OnFinished) where TPresenter : Presenter {
+        public void RequestViewAsync<TPresenter>(TPresenter presenter, Action<bool> OnFinished) where TPresenter : Presenter {
             //find view type from presenter type
             if(!_presenterToView.TryGetValue(presenter.GetType(), out var viewType)) {
                 ServiceLocator.Logger.LogError($"Cannot find ViewType of Presenter: {presenter}");
@@ -82,7 +82,7 @@ namespace Presentation {
             Register<TView, TPresenter, NoArgs>(() => new NoArgs());
         }
 
-        public bool TryRemoveViewOf(Presenter presenter) {
+        public bool RemoveView(Presenter presenter) {
             if(_viewConnections.TryGetValue(presenter, out var viewInstance)) {
                 _viewConnections.Remove(presenter);
                 if(viewInstance != null)

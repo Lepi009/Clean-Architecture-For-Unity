@@ -25,7 +25,7 @@ namespace Infrastructure {
             if(_disposed) return;
 
             Cleanup();
-            _viewManager.TryRemoveViewOf(this);
+            _viewManager.RemoveView(this);
             _subGroup.Dispose();
             _disposed = true;
         }

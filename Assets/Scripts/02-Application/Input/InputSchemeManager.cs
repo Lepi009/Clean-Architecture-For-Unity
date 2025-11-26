@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using Domain;
 using Domain.EventBus;
 
 namespace Application {
-    public class UnityInputAdapter : IInitializable, IUpdatable {
+    public class InputSchemeManager : IInitializable, IUpdatable {
 
         //include all fields and properties here (private & public)
         #region Fields and Properties
 
         public DeviceType CurrentDevice { get; private set; } = DeviceType.None;
 
-        private readonly Dictionary<DeviceType, InputScheme> _inputSchemes;
+        private readonly Dictionary<DeviceType, IInputScheme> _inputSchemes;
+        private readonly InputRouter _router;
 
 
         #endregion
@@ -18,8 +20,9 @@ namespace Application {
         //include all constructors here
         #region Constructors
 
-        public UnityInputAdapter(Dictionary<DeviceType, InputScheme> inputSchemes, DeviceType defaultDevice) {
+        public InputSchemeManager(Dictionary<DeviceType, IInputScheme> inputSchemes, DeviceType defaultDevice, InputRouter router) {
             _inputSchemes = inputSchemes;
+            _router = router;
             CurrentDevice = defaultDevice;
         }
 
@@ -44,7 +47,11 @@ namespace Application {
                 }
             }
 
-            _inputSchemes[CurrentDevice].Update(deltaTime);
+            var commandQueue = _inputSchemes[CurrentDevice].RetrieveCommands(deltaTime);
+            while(commandQueue.TryDequeue(out var command))
+            {
+                _router.OnInputCommand(command);
+            }
         }
 
         #endregion
