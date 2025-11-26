@@ -1,4 +1,4 @@
-namespace Domain {
+namespace Application {
     public class InputRouter {
 
         private readonly InputLayerManager _layerManager;

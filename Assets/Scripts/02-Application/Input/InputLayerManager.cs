@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domain {
+namespace Application {
     public class InputLayerManager {
 
         private readonly Dictionary<InputLayerType, List<IInputLayer>> _layerLists =

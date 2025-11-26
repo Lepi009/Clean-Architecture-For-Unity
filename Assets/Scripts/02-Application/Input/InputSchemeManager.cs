@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Domain.EventBus;
 
-namespace Domain {
+namespace Application {
     public class UnityInputAdapter : IInitializable, IUpdatable {
 
         //include all fields and properties here (private & public)
