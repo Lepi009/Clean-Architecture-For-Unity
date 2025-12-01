@@ -3,11 +3,13 @@ using Domain;
 using Domain.EventBus;
 using Infrastructure;
 using Application;
+using System.Collections.Generic;
+using DeviceType = Domain.DeviceType;
 
 namespace Presentation {
     public class Bootstrapper : MonoBehaviour {
         //include all fields and properties here (private & public)
-        #region Fields and Propertie
+        #region Fields and Properties
 
         private DIContainer _container;
 
@@ -51,6 +53,21 @@ namespace Presentation {
                     new UnityUILayer()
                 }
             ));
+            _container.Register(new InputRouter(
+                _container.Resolve<InputLayerManager>()));
+            _container.Register(new InputSchemeManager(
+                new Dictionary<DeviceType, IInputScheme>{
+                    {DeviceType.KeyboardMouse, new KeyboardMouseScheme()}
+                },
+                DeviceType.KeyboardMouse,
+                _container.Resolve<InputRouter>()
+            ));
+
+            //view manager
+            _container.Register<IPrefabProvider>(new AddressablePrefabProvider());
+            _container.Register<IViewManager>(new ViewPipeline(
+                _container.Resolve<IPrefabProvider>()
+            ));
 
             //platform-dependent injection
             _container.Register<IFileProvider>(
@@ -60,6 +77,30 @@ namespace Presentation {
                 new ReadAllTextFileProvider()
     #endif
             );
+
+
+            //example user interface
+            _container.Register(new HelloWorldService());
+
+            _container.Register(new HelloWorldPresenter(
+                _container.Resolve<IViewManager>(),
+                _container.Resolve<HelloWorldService>()
+            ));
+            _container.Resolve<IViewManager>().Register<HelloWorldView, HelloWorldPresenter>();
+            _container.Register(new HelloWorldInputLayer(
+                _container.Resolve<HelloWorldPresenter>(),
+                _container.Resolve<InputLayerManager>()
+            ));
+        }
+
+        void Start()
+        {
+            _container.InitializePending();
+        }
+
+        void Update()
+        {
+            _container.UpdateAll(Time.deltaTime);
         }
 
         #endregion
