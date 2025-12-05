@@ -50,7 +50,9 @@ All necessary MonoBehaviours are implemented in this layer. Those include the vi
 
 # Core Systems
 ## Event Bus
-The event bus serves as an essential communication channel between services. As part of the domain layer, its primary purpose is to improve the decoupling. One service can listen in to what has occurred and react to them without the knowledge of other services. Also, it enhances the Open-Closed Principle . Additional services can be implemented by listening to the event bus and reacting to incoming events, without modifying the services that send the events. The concrete design of the event bus is available [here](Assets/Scripts/01-Domain/Event%20System/DecoupledEventBus.cs)..
+The event bus serves as an essential communication channel between services. As part of the domain layer, its primary purpose is to improve the decoupling. One service can listen in to what has occurred and react to them without the knowledge of other services. Also, it enhances the Open-Closed Principle . Additional services can be implemented by listening to the event bus and reacting to incoming events, without modifying the services that send the events. The concrete design of the event bus is available [here](Assets/Scripts/01-Domain/Event%20System/DecoupledEventBus.cs).
+
+![The sequence diagram shows how the event bus handles a health change. The audio manager and the player's stats view respond to a health change. They play a sound and update the value accordingly.](Figures/HealthSequenceDiagram.png)
 
 ## Bootstrapper
 The bootstrapper solves multiple problems in one go: tight component coupling, limited flexibility, layer entanglement, and code tied to a single platform. The bootstrapper centralizes lifecycle events, creates the services, and injects them using the dependency injection pattern. See the [HelloWorld-Example bootstrapper](Assets/Scripts/Bootstrapper/HelloWorldBootstrapper.cs).
@@ -66,6 +68,8 @@ A manual dependency injection approach was chosen because the number of services
 Inside the constructor, a service has only limited functionality. Since not every service has been built yet, sending events through the event bus could cause problems. Thus, a service can implement the [IInitializable interface](Assets/Scripts/01-Domain/Bootstrapper/IInitializable.cs). In the bootstrapper's start method, this initialization function is called for each service that implements this interface. At this stage, all services have been created. Since only MonoBehaviours receive the Update method, services can also receive it by implementing the [IUpdatable interface](Assets/Scripts/01-Domain/Bootstrapper/IUpdatable.cs).
 
 An advantage comes in testing services. Testing smaller parts of the game can be done by writing a custom bootstrapper with only the necessary services. Those services can additionally be exchanged quickly, which is beneficial for testing. 
+
+![The UML sequence diagram of a bootstrapper. Multiple services are created and injected.](Figures/Bootstrapper.png)
 
 ## Service Locator
 The service locator pattern provides a global access point to services, allowing components to obtain the services they require without depending on their concrete implementations and without injection. An example is shown [here](Assets/Scripts/01-Domain/Basics/ServiceLocator.cs)
