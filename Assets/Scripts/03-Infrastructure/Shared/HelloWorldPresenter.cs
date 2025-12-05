@@ -1,7 +1,6 @@
 using System;
-using Application;
 using Domain;
-using Domain.EventBus;
+using Application;
 
 namespace Infrastructure
 {

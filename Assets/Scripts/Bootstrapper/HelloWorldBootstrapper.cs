@@ -1,13 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Domain;
 using Domain.EventBus;
-using Infrastructure;
 using Application;
-using System.Collections.Generic;
+using Infrastructure;
+using Presentation;
 using DeviceType = Domain.DeviceType;
 
-namespace Presentation {
-    public class Bootstrapper : MonoBehaviour {
+namespace Bootstrapper {
+    public class HelloWorldBootstrapper : MonoBehaviour {
         //include all fields and properties here (private & public)
         #region Fields and Properties
 
